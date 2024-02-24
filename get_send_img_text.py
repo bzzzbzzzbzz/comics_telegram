@@ -4,12 +4,9 @@ import requests
 def send_image_to_group(bot_token, chat_id, image_path):
     url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
     files = {'photo': open(image_path, 'rb')}
-    data = {'chat_id': chat_id}
-    response = requests.post(url, files=files, data=data)
-    if response.status_code == 200:
-        print("Image post successfully!")
-    else:
-        print(f"Failed to send image. Status code: {response.status_code}")
+    payload = {'chat_id': chat_id}
+    response = requests.post(url, files=files, data=payload)
+    response.raise_for_status()
 
 
 def send_message_to_group(bot_token, chat_id, text):
@@ -19,10 +16,7 @@ def send_message_to_group(bot_token, chat_id, text):
         'text': text
     }
     response = requests.post(url, json=payload)
-    if response.status_code == 200:
-        print("Message sent successfully!")
-    else:
-        print(f"Failed to send message. Status code: {response.status_code}")
+    response.raise_for_status()
 
 
 

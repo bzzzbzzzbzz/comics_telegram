@@ -1,7 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
-import dwnld_sent_img_text as ds
+import get_send_img_text as ds
 import random
 
 
@@ -20,10 +20,14 @@ if __name__ == '__main__':
     image = 'comics.png'
     url = f'https://xkcd.com/{random_comics}/info.0.json'
     author_comment = ds.get_author_comment(url)
-    ds.download_image(url, image)
-    tg_token = os.environ['TG_TOKEN']
-    tg_chat_id = os.environ['TG_CHAT_ID']
+    try:
+        ds.download_image(url, image)
+        tg_token = os.environ['TG_TOKEN']
+        tg_chat_id = os.environ['TG_CHAT_ID']
 
-    ds.send_message_to_group(tg_token, tg_chat_id, author_comment)
-    ds.send_image_to_group(tg_token, tg_chat_id, image)
-    os.remove(image)
+        ds.send_message_to_group(tg_token, tg_chat_id, author_comment)
+        print('Message sent successfully!')
+        ds.send_image_to_group(tg_token, tg_chat_id, image)
+        print('Image post successfully!')
+    finally:
+        os.remove(image)
